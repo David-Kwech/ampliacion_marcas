@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Push Your Luck Solitary</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: rgb(35,127,12);
+    }
+    .game-info {
+      margin: 20px;
+    }
+    .cards img {
+      width: 100px;
+      height: auto;
+      margin: 10px;
+    }
+    .buttons {
+      margin: 20px;
+    }
+    button {
+      margin: 5px;
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 16px;
+    }
+    .vidas img {
+      width: 5%;
+      margin: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="vidas">
+    <img src="imagenes/Vida.jpg" id="miVida1">
+    <img src="imagenes/Vida.jpg" id="miVida2">
+    <img src="imagenes/Vida.jpg" id="miVida3">
+  </div>
+
+  <div class="game-info">
+    <b><p>Número de vidas: <span id="vidas">3</span></p></b>
+    <br>
+    <img width="6%" src="imagenes/Cartas.png">
+    <br>
+    <b><p>Contador de cartas levantadas: <span id="contador">0</span></p></b>
+    <br>
+    <div><b>Carta actual: </b><img style="margin-left: 40px;" width="5%" id="carta-actual" src="" alt="Carta actual"></div>
+  </div>
+
+  <div class="buttons">
+    <button style="color: red; background-color: black;" id="alta">ALTA (15)</button>
+    <button style="color: red; background-color: black;" id="baja">BAJA (15)</button>
+    <button style="color: red; background-color: black;" id="mismo-color">MISMO COLOR (5)</button>
+    <button style="color: red; background-color: black;" id="distinto-color">DISTINTO COLOR (5)</button>
+    <button style="color: red; background-color: black;" id="suma < 11">SUMA < 11 (10)</button>
+    <button style="color: red; background-color: black;" id="comodin">COMODÍN (3)</button>
+  </div>
+  <button style="color: black; background-color: lightgreen;" id="plantarse">PLANTARSE</button>
+
+  <br><br>
+  <div><img width="5%" src="imagenes/Picas.png"><img width="5%" src="imagenes/Corazones.png"><img width="5%" src="imagenes/Treboles.png"><img width="5%" src="imagenes/Diamantes.png"></div>
+    <br>
+    <div><img width="5%" src="imagenes/A_corazones.png">  <img width="5%" src="imagenes/2_corazones.png">  <img width="5%" src="imagenes/3_corazones.png">  <img width="5%" src="imagenes/4_corazones.png">  <img width="5%" src="imagenes/5_corazones.png">  <img width="5%" src="imagenes/6_corazones.png">  <img width="5%" src="imagenes/7_corazones.png">  <img width="5%" src="imagenes/8_corazones.png">  <img width="5%" src="imagenes/9_corazones.png">  <img width="5%" src="imagenes/10_corazones.png">  <img width="5%" src="imagenes/J_corazones.png">  <img width="5%" src="imagenes/Q_corazones.png">  <img width="5%" src="imagenes/K_corazones.png"></div>
+    <div><img width="5%" src="imagenes/A_picas.png">  <img width="5%" src="imagenes/2_picas.png">  <img width="5%" src="imagenes/3_picas.png">  <img width="5%" src="imagenes/4_picas.png">  <img width="5%" src="imagenes/5_picas.png">  <img width="5%" src="imagenes/6_picas.png">  <img width="5%" src="imagenes/7_picas.png">  <img width="5%" src="imagenes/8_picas.png">  <img width="5%" src="imagenes/9_picas.png">  <img width="5%" src="imagenes/10_picas.png">  <img width="5%" src="imagenes/J_picas.png">  <img width="5%" src="imagenes/Q_picas.png">  <img width="5%" src="imagenes/K_picas.png"></div>
+    <div><img width="5%" src="imagenes/A_diamantes.png">  <img width="5%" src="imagenes/2_diamantes.png">  <img width="5%" src="imagenes/3_diamantes.png">  <img width="5%" src="imagenes/4_diamantes.png">  <img width="5%" src="imagenes/5_diamantes.png">  <img width="5%" src="imagenes/6_diamantes.png">  <img width="5%" src="imagenes/7_diamantes.png">  <img width="5%" src="imagenes/8_diamantes.png">  <img width="5%" src="imagenes/9_diamantes.png">  <img width="5%" src="imagenes/10_diamantes.png">  <img width="5%" src="imagenes/J_diamantes.png">  <img width="5%" src="imagenes/Q_diamantes.png">  <img width="5%" src="imagenes/K_diamantes.png"></div>
+    <div><img width="5%" src="imagenes/A_treboles.png">  <img width="5%" src="imagenes/2_treboles.png">  <img width="5%" src="imagenes/3_treboles.png">  <img width="5%" src="imagenes/4_treboles.png">  <img width="5%" src="imagenes/5_treboles.png">  <img width="5%" src="imagenes/6_treboles.png">  <img width="5%" src="imagenes/7_treboles.png">  <img width="5%" src="imagenes/8_treboles.png">  <img width="5%" src="imagenes/9_treboles.png">  <img width="5%" src="imagenes/10_treboles.png">  <img width="5%" src="imagenes/J_treboles.png">  <img width="5%" src="imagenes/Q_treboles.png">  <img width="5%" src="imagenes/K_treboles.png"></div>
+
+  <div class="cards" style="display: none;">
+    <div><img id="siguiente-carta" src="" alt="Siguiente carta"></div>
+  </div>
+
+  <br>
+  <script>
+    const cardValues = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+    const suits = ["corazones", "diamantes", "treboles", "picas"];
+    const colors = { "corazones": "red", "diamantes": "red", "treboles": "black", "picas": "black" };
+
+    let vidas = 3;
+    let contador = 0;
+    let cartaActual = null;
+    let streak = 0;
+
+    const buttonCounters = {
+      alta: 15,
+      baja: 15,
+      "mismo-color": 5,
+      "distinto-color": 5,
+      "suma < 11": 10,
+      comodin: 3,
+    };
+
+    function getRandomCard() {
+      const value = cardValues[Math.floor(Math.random() * cardValues.length)];
+      const suit = suits[Math.floor(Math.random() * suits.length)];
+      return { value, suit, color: colors[suit] };
+    }
+
+    function cardValue(card) {
+      if (card.value === "A") return 1;
+      if (["J", "Q", "K"].includes(card.value)) return 10;
+      return parseInt(card.value);
+    }
+
+    function getCardImage(card) {
+      return `imagenes/${card.value}_${card.suit}.png`;
+    }
+
+    function updateUI() {
+      document.getElementById("vidas").textContent = vidas;
+      document.getElementById("contador").textContent = contador;
+      document.getElementById("carta-actual").src = cartaActual ? getCardImage(cartaActual) : "";
+      document.getElementById("carta-actual").alt = cartaActual ? `${cartaActual.value} de ${cartaActual.suit}` : "Carta actual";
+      document.getElementById("siguiente-carta").src = "";
+      document.getElementById("siguiente-carta").alt = "Siguiente carta";
+
+      VidasImagenes();
+
+      for (const buttonId in buttonCounters) {
+        document.getElementById(buttonId).textContent = `${buttonId.toUpperCase()} (${buttonCounters[buttonId]})`;
+        document.getElementById(buttonId).disabled = buttonCounters[buttonId] <= 0;
+      }
+    }
+
+    function VidasImagenes() {
+      const lifeImages = [
+        document.getElementById("miVida1"),
+        document.getElementById("miVida2"),
+        document.getElementById("miVida3"),
+      ];
+
+      lifeImages.forEach((img, index) => {
+        img.src = index < vidas ? "imagenes/Vida.jpg":"imagenes/Calabera.jpg";
+      });
+    }
+
+    function makeGuess(type) {
+      if (buttonCounters[type] <= 0) return;
+      buttonCounters[type]--;
+
+      const nextCard = getRandomCard();
+      document.getElementById("siguiente-carta").src = getCardImage(nextCard);
+      document.getElementById("siguiente-carta").alt = `${nextCard.value} de ${nextCard.suit}`;
+
+      let success = false;
+      switch (type) {
+        case "alta":
+          success = cardValue(nextCard) > cardValue(cartaActual);
+          break;
+        case "baja":
+          success = cardValue(nextCard) < cardValue(cartaActual);
+          break;
+        case "mismo-color":
+          success = nextCard.color === cartaActual.color;
+          break;
+        case "distinto-color":
+          success = nextCard.color !== cartaActual.color;
+          break;
+        case "suma < 11":
+          success = cardValue(nextCard) + cardValue(cartaActual) < 11;
+          break;
+        case "comodin":
+          success = true;
+          break;
+      }
+
+      if (success) {
+        streak++;
+        contador++;
+        if (streak >= 5) {
+          for (const btn in buttonCounters) {
+            if (btn !== "comodin") buttonCounters[btn]++;
+          }
+          streak = 0;
+        }
+        cartaActual = nextCard;
+      } else {
+        vidas--;
+        streak = 0;
+        if (vidas === 0) {
+          alert("¡Fin de la partida! Has perdido todas las vidas.");
+          resetGame();
+          return;
+        }
+      }
+
+      updateUI();
+    }
+
+    function resetGame() {
+      vidas = 3;
+      contador = 0;
+      streak = 0;
+      cartaActual = getRandomCard();
+      for (const key in buttonCounters) buttonCounters[key] = { alta: 15, baja: 15, "mismo-color": 5, "distinto-color": 5, "suma < 11": 10, comodin: 3 }[key];
+      updateUI();
+    }
+
+    document.getElementById("alta").addEventListener("click", () => makeGuess("alta"));
+    document.getElementById("baja").addEventListener("click", () => makeGuess("baja"));
+    document.getElementById("mismo-color").addEventListener("click", () => makeGuess("mismo-color"));
+    document.getElementById("distinto-color").addEventListener("click", () => makeGuess("distinto-color"));
+    document.getElementById("suma < 11").addEventListener("click", () => makeGuess("suma < 11"));
+    document.getElementById("comodin").addEventListener("click", () => makeGuess("comodin"));
+    document.getElementById("plantarse").addEventListener("click", () => {
+      alert(`¡Fin de la partida! Has levantado ${contador} cartas.`);
+      resetGame();
+    });
+
+    resetGame();
+  </script>
+</body>
+</html>
