@@ -18,14 +18,15 @@ console.log(otrasFrutas);
 
 
 /*Hacemos un boton para guardar claves con valor*/
-let miBoton = document.getElementById('miBoton');
 
 function init() {
-    
-miBoton.addEventListener ( 'click', () => {
-    let miClave = document.getElementById('miClave').value;
-    let miValor = document.getElementById('miValor').value;
 
-    localStorage.setItem(miClave,miValor);
+    let miBoton = document.getElementById('miBoton');
+    
+    miBoton.addEventListener ( 'click', () => {
+        let miClave = document.getElementById('miClave').value;
+        let miValor = document.getElementById('miValor').value;
+
+        localStorage.setItem(miClave,miValor);
 });
 }
