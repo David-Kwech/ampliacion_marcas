@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESCONDITE_INGLES_REGULAR</title>
+    <style>
+        canvas
+        {
+            background: grey;
+            border: 2px solid black;
+            display: block;
+            margin: 0 auto;
+        }
+
+        #b1{
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="gameCanvas" width="700" height="600"></canvas>
+
+
+    <script>
+
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const p1 = {
+            x: 50,
+            y: 150,
+            w:30,
+            h:60,
+            paso: 5,
+            imagen: new Image(),
+        };
+
+        const p2 = {
+            x: 100,
+            y: 150,
+            w:30,
+            h:60,
+            paso: 5,
+            imagen: new Image(),
+        };
+
+        const p3 = {
+            x: 150,
+            y: 150,
+            w:30,
+            h:60,
+            paso: 5,
+            imagen: new Image(),
+        };
+
+        const p4 = {
+            x: 200,
+            y: 150,
+            w:30,
+            h:60,
+            paso: 5,
+            imagen: new Image(),
+        };
+
+        p1.imagen.src = "imagenes/Jugador1.png";
+        p2.imagen.src = "imagenes/Jugador2.png";
+        p3.imagen.src = "imagenes/Jugador3.png";
+        p4.imagen.src = "imagenes/Jugador4.png";
+
+
+
+        function pintarJugadores() 
+        {
+            ctx.fillRect(p1.x,p1.y,p1.w,p1.h);    
+        };
+
+
+    </script>
+</body>
+</html>
