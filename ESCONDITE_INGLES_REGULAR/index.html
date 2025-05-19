@@ -19,13 +19,42 @@
             padding: 10px 20px;
             font-size: 16px;
         }
+
+        .button-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .player-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: 2px solid black;
+            cursor: pointer;
+        }
+
     </style>
 </head>
 <body>
 
-    <canvas id="gameCanvas" width="700" height="700"></canvas>
+    <canvas id="gameCanvas" width="700" height="680"></canvas>
 
+    <div class="button-container">
+        
+    <div class="player-buttons">
+        <h4>Mario</h4>
+        <button>Avanzar!!</button>
+        <button>Parar!!</button>
 
+    </div>
+
+    </div>
     <script>
 
 const canvas = document.getElementById('gameCanvas');
@@ -33,47 +62,47 @@ const canvas = document.getElementById('gameCanvas');
 
         let cuadrado1 = {
             x: 30,
-            y: 580,
+            y: 550,
             w: 30,
             h: 50,
         };
 
         let cuadrado2 = {
             x: 30,
-            y: 520,
+            y: 490,
             w: 30,
             h: 50,
         };
 
         let jugador1 = {
             x: 150,
-            y: 650,
-            w: 35,
-            h: 50,
+            y: 600,
+            w: 50,
+            h: 65,
             imagen: new Image(),
         };
 
         let jugador2 = {
             x: 300,
-            y: 650,
-            w: 35,
-            h: 50,
+            y: 600,
+            w: 50,
+            h: 65,
             imagen: new Image(),
         };
 
         let jugador3 = {
             x: 450,
-            y: 650,
-            w: 35,
-            h: 50,
+            y: 600,
+            w: 60,
+            h: 65,
             imagen: new Image(),
         };
 
         let jugador4 = {
             x: 600,
-            y: 650,
-            w: 35,
-            h: 50,
+            y: 600,
+            w: 45,
+            h: 65,
             imagen: new Image(),
         };
 
