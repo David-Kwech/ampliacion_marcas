@@ -23,7 +23,7 @@
         .button-container {
             display: flex;
             justify-content: space-around;
-            margin-top: 20px;
+            margin-top: -8px;
         }
 
         .player-buttons {
@@ -37,21 +37,33 @@
             padding: 10px 15px;
             border: 2px solid black;
             cursor: pointer;
+            float: left 5px;
         }
 
     </style>
 </head>
 <body>
 
-    <canvas id="gameCanvas" width="700" height="680"></canvas>
+    <canvas id="gameCanvas" width="700" height="670"></canvas>
 
     <div class="button-container">
         
-    <div class="player-buttons">
-        <h4>Mario</h4>
-        <button>Avanzar!!</button>
-        <button>Parar!!</button>
+    <div>
+        <h4 class="player-buttons">Mario</h4>
+        <button id="avanzarMario">Avanzar!!</button>
+        <button id="pararMario">Parar!!</button>
+    </div>
 
+    <div>
+        <h4 class="player-buttons">Luigi</h4>
+        <button id="avanzarLuigi">Avanzar!!</button>
+        <button id="pararLuigi">Parar!!</button>
+    </div>
+
+    <div>
+        <h4 class="player-buttons">Sonic</h4>
+        <button id="avanzarSonic">Avanzar!!</button>
+        <button id="pararSonic">Parar!!</button>
     </div>
 
     </div>
@@ -93,15 +105,7 @@ const canvas = document.getElementById('gameCanvas');
         let jugador3 = {
             x: 450,
             y: 600,
-            w: 60,
-            h: 65,
-            imagen: new Image(),
-        };
-
-        let jugador4 = {
-            x: 600,
-            y: 600,
-            w: 45,
+            w: 50,
             h: 65,
             imagen: new Image(),
         };
@@ -109,7 +113,6 @@ const canvas = document.getElementById('gameCanvas');
         jugador1.imagen.src = "imagenes/Jugador1.png";
         jugador2.imagen.src = "imagenes/Jugador2.png";
         jugador3.imagen.src = "imagenes/Jugador3.png";
-        jugador4.imagen.src = "imagenes/Jugador4.png";
 
         function pintarCuadrado1() 
         {
@@ -155,13 +158,23 @@ const canvas = document.getElementById('gameCanvas');
             ctx.drawImage(jugador1.imagen,jugador1.x,jugador1.y,jugador1.w,jugador1.h);
             ctx.drawImage(jugador2.imagen,jugador2.x,jugador2.y,jugador2.w,jugador2.h);
             ctx.drawImage(jugador3.imagen,jugador3.x,jugador3.y,jugador3.w,jugador3.h);
-            ctx.drawImage(jugador4.imagen,jugador4.x,jugador4.y,jugador4.w,jugador4.h);
 
 
             requestAnimationFrame(pintarJugadores);
         };
 
         pintarJugadores();
+
+
+        let dadoNegro1 = [1,1,1,1,2,2];
+        let dadoNegro2 = [1,1,1,1,0,0];
+        let dadoNegro3 = [1,1,0,0,0,0];
+        let dadoRojo = [1,1,1,1,1,0];
+
+
+        function sacarDado() {
+            
+        }
 
 
     </script>
