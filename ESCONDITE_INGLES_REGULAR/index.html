@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>ESCONDITE INGLES REGULAR</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #f0f0f0;
+      text-align: center;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    h1 {
+      font-size: 2.2em;
+      margin-bottom: 20px;
+      color: #00ffe5;
+      text-shadow: 1px 1px 5px #00ffe5aa;
+    }
+
+    .tablero {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
+      background: black;
+      border: 3px solid #00ffe5;
+      border-radius: 15px;
+      padding: 12px;
+      max-width: max-content;
+      margin: 0 auto 20px;
+      position: relative;
+    }
+
+    .columna {
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: center;
+    }
+
+    .casilla {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 3px solid #00ffe566;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 3px;
+      transition: background 0.3s;
+    }
+
+    .casilla:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .ficha {
+      font-weight: bold;
+      font-size: 0.85em;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 6px rgba(0,0,0,0.3);
+    }
+
+    .jugador1 { background-color: cyan; color: black;}
+    .jugador2 { background-color: lightgreen; color: black;}
+    .jugador3 { background-color: yellow; color: black;}
+    .corazon::after { content: " ❤️"; }
+
+    #controles {
+      max-width: 400px;
+      margin: 0 auto 20px;
+      text-align: left;
+    }
+
+    #controles div {
+      margin-bottom: 12px;
+    }
+
+    button {
+      font-family: inherit;
+      font-size: 0.85em;
+      padding: 6px 12px;
+      margin: 4px 5px 0 0;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .boton-andar {
+      background-color: green;
+      color: #fff;
+    }
+
+    .boton-pararse {
+      background-color: red;
+      color: #fff;
+    }
+
+    .boton-turno {
+      background-color: #9b59b6;
+      color: white;
+      padding: 10px 18px;
+      font-size: 1em;
+      margin-bottom: 20px;
+      box-shadow: 0 0 20px purple;
+    }
+
+    .boton-activo {
+      box-shadow: 0 0 10px #fff;
+      transform: scale(1.05);
+    }
+
+    .boton-inactivo {
+      opacity: 0.6;
+    }
+
+    #bolsaDados {
+      background: #34495e;
+      padding: 8px 12px;
+      border: 5px solid #1abc9c;
+      border-radius: 8px;
+      margin: 0 auto 15px;
+      max-width: 400px;
+      text-align: left;
+    }
+
+    #registro {
+      background: #000;
+      color: violet;
+      font-family: monospace;
+      padding: 10px;
+      border-radius: 8px;
+      max-height: 200px;
+      overflow-y: auto;
+      margin: 0 auto;
+      max-width: 400px;
+      
+    }
+
+  </style>
+</head>
+
+<body>
+
+<h1>ESCONDITE INGLES REGULAR</h1>
+
+<div class="tablero" id="tablero"></div>
+<div id="controles"></div>
+<button class="boton-turno" onclick="siguienteTurno()">Turno</button>
+
+<div id="bolsaDados"></div>
+<div id="registro"></div>
+
+<script>
+const NUM_CASILLAS = 11; 
+
+const jugadores = [
+  { nombre: "Jugador 1", pos: 0, avanza: false, corazon: false, color: "jugador1" },
+  { nombre: "Jugador 2", pos: 0, avanza: false, corazon: false, color: "jugador2" },
+  { nombre: "Jugador 3", pos: 0, avanza: false, corazon: false, color: "jugador3" }
+];
+
+let bolsa = ['N1', 'N2', 'N3', 'R'];
+let dadosNegrosUsados = [];
+
+function crearTablero() {
+  const tablero = document.getElementById("tablero");
+  tablero.innerHTML = "";
+  jugadores.forEach((jugador, i) => {
+    const columna = document.createElement("div");
+    columna.className = "columna";
+
+    for (let j = 0; j < NUM_CASILLAS; j++) {
+      const casilla = document.createElement("div");
+      casilla.className = "casilla";
+      if (jugador.pos === j) {
+        casilla.innerHTML = `<span class="ficha ${jugador.color}${jugador.corazon ? ' corazon' : ''}">J${i + 1}</span>`;
+      }
+      columna.appendChild(casilla);
+    }
+    tablero.appendChild(columna);
+  });
+}
+
+function crearControles() {
+  const controles = document.getElementById("controles");
+  controles.innerHTML = "";
+  jugadores.forEach((j, i) => {
+    controles.innerHTML += `
+      <div>
+        <strong>${j.nombre}</strong><br>
+        <button class="boton-andar" onclick="setAccion(${i}, true)" id="btn-andar-${i}">Andar</button>
+        <button class="boton-pararse" onclick="setAccion(${i}, false)" id="btn-pararse-${i}">Pararse</button>
+      </div>`;
+  });
+  jugadores.forEach((_, i) => setAccion(i, jugadores[i].avanza));
+}
+
+function setAccion(index, avanza) {
+  jugadores[index].avanza = avanza;
+  const btnAndar = document.getElementById(`btn-andar-${index}`);
+  const btnPararse = document.getElementById(`btn-pararse-${index}`);
+
+  if (btnAndar && btnPararse) {
+    btnAndar.classList.toggle("boton-activo", avanza);
+    btnPararse.classList.toggle("boton-activo", !avanza);
+
+    btnAndar.classList.toggle("boton-inactivo", !avanza);
+    btnPararse.classList.toggle("boton-inactivo", avanza);
+  }
+}
+
+function actualizarBolsa() {
+  document.getElementById("bolsaDados").innerHTML =
+    `<strong>Bolsa:</strong> ${bolsa.join(", ") || "vacía"}`;
+}
+
+function tirarDado(tipo) {
+  if (tipo === 'N1') return Math.random() < 1/3 ? 2 : 1;
+  if (tipo === 'N2' || tipo === 'N3') return Math.random() < 1/3 ? 1 : 0;
+  if (tipo === 'R') return Math.random() < 5/6 ? 1 : 0;
+  return 0;
+}
+
+function siguienteTurno() {
+  const registro = document.getElementById("registro");
+  registro.innerHTML = "";
+
+  const dadoSacado = bolsa.splice(Math.floor(Math.random() * bolsa.length), 1)[0];
+  registro.innerHTML += `Dado: ${dadoSacado}<br>`;
+
+  if (dadoSacado === 'R') {
+    bolsa = ['N1', 'N2', 'N3', 'R'];
+    registro.innerHTML += `Se reinicia la bolsa<br>`;
+  }
+
+  if (dadoSacado.startsWith('N')) dadosNegrosUsados.push(dadoSacado);
+
+  jugadores.forEach(j => {
+    if (!j.avanza) {
+      if (dadoSacado === 'R' && !j.corazon) {
+        j.corazon = true;
+        registro.innerHTML += `${j.nombre} gana ❤️<br>`;
+      }
+    } else {
+      if (dadoSacado.startsWith('N')) {
+        let total = 0;
+        dadosNegrosUsados.forEach(d => total += tirarDado(d));
+        j.pos = Math.min(NUM_CASILLAS - 1, j.pos + total);
+        registro.innerHTML += `${j.nombre} avanza ${total}<br>`;
+      } else if (dadoSacado === 'R') {
+        if (j.corazon) {
+          j.corazon = false;
+          registro.innerHTML += `${j.nombre} pierde ❤️<br>`;
+        } else {
+          let total = 0;
+          [...dadosNegrosUsados, 'R'].forEach(d => total += tirarDado(d));
+          j.pos = Math.max(0, j.pos - total);
+          registro.innerHTML += `${j.nombre} retrocede ${total}<br>`;
+        }
+      }
+    }
+  });
+
+  const ganadores = jugadores.filter(j => j.pos >= NUM_CASILLAS - 1);
+  if (ganadores.length > 0) {
+    alert("Ganador/es: " + ganadores.map(j => j.nombre).join(", "));
+    reiniciarJuego();
+    return;
+  }
+
+  crearTablero();
+  crearControles();
+  actualizarBolsa();
+}
+
+function reiniciarJuego() {
+  jugadores.forEach(j => {
+    j.pos = 0;
+    j.corazon = false;
+  });
+  dadosNegrosUsados = [];
+  bolsa = ['N1', 'N2', 'N3', 'R'];
+  crearTablero();
+  crearControles();
+  actualizarBolsa();
+  document.getElementById("registro").innerHTML = "";
+}
+
+reiniciarJuego();
+</script>
+
+</body>
+</html>
